@@ -36,11 +36,9 @@ func populateConfig(m map[string]interface{}) *Config {
 	dst := &Config{}
 	if address, ok := m["address"].(string); ok {
 		dst.Address = address
-		delete(m, "address")
 	}
 	if devMode, ok := m["devMode"].(bool); ok {
 		dst.DevMode = devMode
-		delete(m, "devMode")
 	}
 	dst.Custom = m
 	return dst
