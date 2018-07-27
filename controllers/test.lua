@@ -1,3 +1,4 @@
 local c = require('config')
+local req = require('http')
 print(c.get('myCustomKey'))
-print(112122)
+print(req.param('name'))
