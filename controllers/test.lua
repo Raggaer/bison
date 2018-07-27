@@ -1,3 +1,3 @@
-local http = require('http')
-print(http.redirect("/df", 302))
+local c = require('config')
+print(c.get('myCustomKey'))
 print(112122)
