@@ -1,0 +1,8 @@
+local router = {
+  ['/test/:name'] = {
+    get = 'test.lua',
+    post = 'post.lua'
+  }
+}
+
+return router
