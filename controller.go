@@ -3,7 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
+	"path/filepath"
 
+	"github.com/raggaer/bison/lua"
+	glua "github.com/tul/gopher-lua"
 	"github.com/valyala/fasthttp"
 )
 
@@ -11,6 +14,7 @@ import (
 type Handler struct {
 	Config *Config
 	Routes []*Route
+	Files  map[string]*glua.FunctionProto
 }
 
 // MainRoute handles all http requests
@@ -21,5 +25,24 @@ func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 		params[string(b)] = fmt.Sprint(i)
 	})
 	route := retrieveCurrentRoute(params, string(ctx.Method()), string(ctx.Path()), h.Routes)
-	log.Println(route)
+
+	// Retrieve compiled file for this route
+	proto, ok := h.Files[filepath.Join("controllers", route.File)]
+	if !ok {
+		ctx.NotFound()
+		return
+	}
+
+	// Create state with bison modules
+	state := lua.NewState([]*lua.Module{
+		lua.NewHTTPModule(ctx),
+	})
+	defer state.Close()
+
+	// Execute compiled state
+	if err := lua.DoCompiledFile(state, proto); err != nil {
+		log.Println(err)
+		ctx.Error("Unable to execute "+route.Path, 500)
+		return
+	}
 }

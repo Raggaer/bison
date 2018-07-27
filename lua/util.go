@@ -1,10 +1,13 @@
 package lua
 
 import (
+	"bufio"
 	"fmt"
 	"math"
+	"os"
 
-	glua "github.com/yuin/gopher-lua"
+	glua "github.com/tul/gopher-lua"
+	"github.com/yuin/gopher-lua/parse"
 )
 
 // TableToMap converts a lua table into a go map[string]interface
@@ -66,4 +69,31 @@ func isNumberFloat(v glua.LValue) bool {
 // IsValueTable checks if the lua value is a table
 func IsValueTable(v glua.LValue) bool {
 	return v.Type() == glua.LTTable
+}
+
+// CompileLua reads the passed lua file from disk and compiles it.
+func CompileLua(filePath string) (*glua.FunctionProto, error) {
+	file, err := os.Open(filePath)
+	defer file.Close()
+	if err != nil {
+		return nil, err
+	}
+	reader := bufio.NewReader(file)
+	chunk, err := parse.Parse(reader, filePath)
+	if err != nil {
+		return nil, err
+	}
+	proto, err := glua.Compile(chunk, filePath)
+	if err != nil {
+		return nil, err
+	}
+	return proto, nil
+}
+
+// DoCompiledFile takes a FunctionProto, as returned by CompileLua, and runs it in the LState. It is equivalent
+// to calling DoFile on the LState with the original source file.
+func DoCompiledFile(state *glua.LState, proto *glua.FunctionProto) error {
+	lfunc := state.NewFunctionFromProto(proto)
+	state.Push(lfunc)
+	return state.PCall(0, glua.MultRet, nil)
 }

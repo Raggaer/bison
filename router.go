@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/raggaer/bison/lua"
-	glua "github.com/yuin/gopher-lua"
+	glua "github.com/tul/gopher-lua"
 )
 
 // Route defines a lua route
@@ -41,6 +41,9 @@ func createRoutes(m map[string]interface{}) []*Route {
 		if !ok {
 			continue
 		}
+
+		// Retrieve path methods if they exist
+		// Each method will be added into a route
 		getPath, ok := methodMap["get"].(string)
 		if ok {
 			dst = append(dst, &Route{

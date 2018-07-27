@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/buaazp/fasthttprouter"
+	"github.com/raggaer/bison/lua"
 
 	"github.com/valyala/fasthttp"
 )
@@ -12,6 +13,12 @@ import (
 func main() {
 	// Load config file
 	config, err := loadConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Compile all lua files
+	files, err := lua.CompileFiles("controllers")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,6 +34,7 @@ func main() {
 	handler := &Handler{
 		Config: config,
 		Routes: routes,
+		Files:  files,
 	}
 
 	for _, r := range routes {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/raggaer/bison/lua"
-	glua "github.com/yuin/gopher-lua"
+	glua "github.com/tul/gopher-lua"
 )
 
 // Config struct used for all configuration options
