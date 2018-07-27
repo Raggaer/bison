@@ -22,6 +22,26 @@ func TableToMap(src *glua.LTable) map[string]interface{} {
 	return dst
 }
 
+// GoValueToLua converts a go value into a lua value
+func GoValueToLua(val interface{}) glua.LValue {
+	switch v := val.(type) {
+	case string:
+		return glua.LString(v)
+	case bool:
+		return glua.LBool(v)
+	case int:
+		return glua.LNumber(v)
+	case int32:
+		return glua.LNumber(v)
+	case int64:
+		return glua.LNumber(v)
+	case float64:
+		return glua.LNumber(v)
+	default:
+		return glua.LNil
+	}
+}
+
 // LuaValueToGo converts a lua value into a go value
 func LuaValueToGo(dst glua.LValue) interface{} {
 	switch v := dst.(type) {
