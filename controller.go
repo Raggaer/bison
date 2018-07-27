@@ -36,6 +36,7 @@ func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 	// Create state with bison modules
 	state := lua.NewState([]*lua.Module{
 		lua.NewHTTPModule(ctx),
+		lua.NewConfigModule(h.Config.Custom),
 	})
 	defer state.Close()
 
