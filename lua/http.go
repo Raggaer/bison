@@ -1,6 +1,8 @@
 package lua
 
 import (
+	"fmt"
+
 	glua "github.com/tul/gopher-lua"
 	"github.com/valyala/fasthttp"
 )
@@ -21,10 +23,41 @@ func NewHTTPModule(ctx *fasthttp.RequestCtx, params map[string]string) *Module {
 		Name: "http",
 		Data: module,
 		Funcs: map[string]glua.LGFunction{
-			"redirect": module.Redirect,
-			"param":    module.GetParam,
+			"getCookie": module.GetCookie,
+			"setCookie": module.SetCookie,
+			"redirect":  module.Redirect,
+			"param":     module.GetParam,
 		},
 	}
+}
+
+// SetCookie sets a HTTP cookie
+func (h *HTTPModule) SetCookie(state *glua.LState) int {
+	var cookie fasthttp.Cookie
+	cookie.SetKey(state.ToString(1))
+	cookie.SetValue(fmt.Sprint(LuaValueToGo(state.Get(2))))
+	cookie.SetHTTPOnly(true)
+	h.RequestContext.Response.Header.SetCookie(&cookie)
+	return 0
+}
+
+// GetCookie retrieves a HTTP cookie
+func (h *HTTPModule) GetCookie(state *glua.LState) int {
+	n := state.ToString(1)
+	f := false
+	h.RequestContext.Request.Header.VisitAllCookie(func(k, v []byte) {
+		if f {
+			return
+		}
+		if string(k) == n {
+			state.Push(glua.LString(string(v)))
+			f = true
+		}
+	})
+	if f {
+		return 1
+	}
+	return 0
 }
 
 // GetParam retrieves a request param
