@@ -10,9 +10,16 @@ import (
 
 // Module represents a lua module
 type Module struct {
+	Name   string
+	Funcs  map[string]glua.LGFunction
+	Values []ModuleValue
+	Data   interface{}
+}
+
+// ModuleValue data used for module values
+type ModuleValue struct {
 	Name  string
-	Funcs map[string]glua.LGFunction
-	Data  interface{}
+	Value glua.LValue
 }
 
 // LoaderValue sets values on a module loader func
@@ -21,11 +28,14 @@ type LoaderValue struct {
 	Value interface{}
 }
 
-func makeLoader(state *glua.LState, funcs map[string]glua.LGFunction, moduleData interface{}) func(*glua.LState) int {
+func makeLoader(state *glua.LState, funcs map[string]glua.LGFunction, moduleData interface{}, values []ModuleValue) func(*glua.LState) int {
 	mod := state.SetFuncs(state.NewTable(), funcs)
 	data := state.NewUserData()
 	data.Value = moduleData
 	state.SetField(mod, "__data", data)
+	for _, v := range values {
+		state.SetField(mod, v.Name, v.Value)
+	}
 	return func(s *glua.LState) int {
 		s.Push(mod)
 		return 1
@@ -56,7 +66,7 @@ func CompileFiles(dir string) (map[string]*glua.FunctionProto, error) {
 func NewState(modules []*Module) *glua.LState {
 	state := glua.NewState()
 	for _, module := range modules {
-		state.PreloadModule(module.Name, makeLoader(state, module.Funcs, module.Data))
+		state.PreloadModule(module.Name, makeLoader(state, module.Funcs, module.Data, module.Values))
 	}
 	return state
 }

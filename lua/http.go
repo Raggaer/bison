@@ -14,14 +14,15 @@ type HTTPModule struct {
 }
 
 // NewHTTPModule returns a new http module
-func NewHTTPModule(ctx *fasthttp.RequestCtx, params map[string]string) *Module {
+func NewHTTPModule(ctx *fasthttp.RequestCtx, params map[string]string, values ...ModuleValue) *Module {
 	module := &HTTPModule{
 		RequestContext: ctx,
 		RequestParams:  params,
 	}
 	return &Module{
-		Name: "http",
-		Data: module,
+		Name:   "http",
+		Data:   module,
+		Values: values,
 		Funcs: map[string]glua.LGFunction{
 			"getCookie": module.GetCookie,
 			"setCookie": module.SetCookie,
