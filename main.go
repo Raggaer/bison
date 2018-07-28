@@ -52,5 +52,10 @@ func main() {
 			router.POST(r.Path, handler.MainRoute)
 		}
 	}
+	if config.DevMode {
+		log.Println("Running development mode - bison listening on address '" + config.Address + "'")
+	} else {
+		log.Println("bison listening on address '" + config.Address + "'")
+	}
 	fasthttp.ListenAndServe(config.Address, router.Handler)
 }
