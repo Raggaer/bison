@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"path/filepath"
 
@@ -15,6 +16,7 @@ type Handler struct {
 	Config *Config
 	Routes []*Route
 	Files  map[string]*glua.FunctionProto
+	Tpl    *template.Template
 }
 
 // MainRoute handles all http requests
@@ -37,6 +39,7 @@ func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 	state := lua.NewState([]*lua.Module{
 		lua.NewHTTPModule(ctx, params),
 		lua.NewConfigModule(h.Config.Custom),
+		lua.NewTemplateModule(h.Tpl, ctx),
 	})
 	defer state.Close()
 

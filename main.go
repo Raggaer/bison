@@ -23,6 +23,12 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Load all templates
+	tpl, err := loadTemplates()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// Create fasthttp router
 	router := fasthttprouter.New()
 	routes, err := loadRoutes()
@@ -35,6 +41,7 @@ func main() {
 		Config: config,
 		Routes: routes,
 		Files:  files,
+		Tpl:    tpl,
 	}
 
 	for _, r := range routes {

@@ -1,4 +1,6 @@
 local c = require('config')
 local req = require('http')
+local template = require('template')
 print(c.get('myCustomKey'))
 print(req.param('name'))
+template.render('test.html', { name = 'Alvaro', age = 22 })
