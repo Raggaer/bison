@@ -24,12 +24,33 @@ func NewHTTPModule(ctx *fasthttp.RequestCtx, params map[string]string, values ..
 		Data:   module,
 		Values: values,
 		Funcs: map[string]glua.LGFunction{
-			"getCookie": module.GetCookie,
-			"setCookie": module.SetCookie,
-			"redirect":  module.Redirect,
-			"param":     module.GetParam,
+			"method":        module.GetRequestMethod,
+			"uri":           module.GetRelativeURL,
+			"remoteAddress": module.GetRemoteAddress,
+			"getCookie":     module.GetCookie,
+			"setCookie":     module.SetCookie,
+			"redirect":      module.Redirect,
+			"param":         module.GetParam,
 		},
 	}
+}
+
+// GetRequestMethod retrieves the request method
+func (h *HTTPModule) GetRequestMethod(state *glua.LState) int {
+	state.Push(glua.LString(string(h.RequestContext.Method())))
+	return 1
+}
+
+// GetRelativeURL retrieves the request uri
+func (h *HTTPModule) GetRelativeURL(state *glua.LState) int {
+	state.Push(glua.LString(string(h.RequestContext.RequestURI())))
+	return 1
+}
+
+// GetRemoteAddress retrieves the request remote address
+func (h *HTTPModule) GetRemoteAddress(state *glua.LState) int {
+	state.Push(glua.LString(h.RequestContext.RemoteIP().String()))
+	return 1
 }
 
 // SetCookie sets a HTTP cookie
