@@ -24,6 +24,7 @@ func NewHTTPModule(ctx *fasthttp.RequestCtx, params map[string]string, values ..
 		Data:   module,
 		Values: values,
 		Funcs: map[string]glua.LGFunction{
+			"write":         module.Write,
 			"method":        module.GetRequestMethod,
 			"uri":           module.GetRelativeURL,
 			"remoteAddress": module.GetRemoteAddress,
@@ -33,6 +34,14 @@ func NewHTTPModule(ctx *fasthttp.RequestCtx, params map[string]string, values ..
 			"param":         module.GetParam,
 		},
 	}
+}
+
+// Write writes data to the request response writer
+func (h *HTTPModule) Write(state *glua.LState) int {
+	if _, err := h.RequestContext.Write([]byte(state.ToString(1))); err != nil {
+		state.RaiseError("Unable to write data into request response - %s", err)
+	}
+	return 0
 }
 
 // GetRequestMethod retrieves the request method
