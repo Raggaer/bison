@@ -23,12 +23,6 @@ type Handler struct {
 func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 	// If we are running under development mode reload stuff
 	if h.Config.DevMode {
-		tpl, err := loadTemplates()
-		if err != nil {
-			ctx.Error("Unable to reload templates", 500)
-			return
-		}
-		h.Tpl = tpl
 		routes, err := loadRoutes()
 		if err != nil {
 			ctx.Error("Unable to reload routes", 500)
@@ -41,6 +35,16 @@ func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 			return
 		}
 		h.Files = luaFiles
+		tpl, err := loadTemplates(&TemplateFuncData{
+			Config: h.Config,
+			Files:  h.Files,
+		})
+		if err != nil {
+			log.Println(err)
+			ctx.Error("Unable to reload templates", 500)
+			return
+		}
+		h.Tpl = tpl
 	}
 
 	// Retrieve current route

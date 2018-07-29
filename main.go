@@ -24,7 +24,10 @@ func main() {
 	}
 
 	// Load all templates
-	tpl, err := loadTemplates()
+	tpl, err := loadTemplates(&TemplateFuncData{
+		Config: config,
+		Files:  files,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}

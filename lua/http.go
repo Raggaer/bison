@@ -24,6 +24,7 @@ func NewHTTPModule(ctx *fasthttp.RequestCtx, params map[string]string, values ..
 		Data:   module,
 		Values: values,
 		Funcs: map[string]glua.LGFunction{
+			"serveFile":     module.ServeFile,
 			"write":         module.Write,
 			"method":        module.GetRequestMethod,
 			"uri":           module.GetRelativeURL,
@@ -34,6 +35,12 @@ func NewHTTPModule(ctx *fasthttp.RequestCtx, params map[string]string, values ..
 			"param":         module.GetParam,
 		},
 	}
+}
+
+// ServeFile serves the given file
+func (h *HTTPModule) ServeFile(state *glua.LState) int {
+	h.RequestContext.SendFile(state.ToString(1))
+	return 0
 }
 
 // Write writes data to the request response writer
