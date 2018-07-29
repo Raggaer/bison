@@ -24,6 +24,7 @@ func NewHTTPModule(ctx *fasthttp.RequestCtx, params map[string]string, values ..
 		Data:   module,
 		Values: values,
 		Funcs: map[string]glua.LGFunction{
+			"body":          module.ReadBody,
 			"serveFile":     module.ServeFile,
 			"write":         module.Write,
 			"method":        module.GetRequestMethod,
@@ -35,6 +36,12 @@ func NewHTTPModule(ctx *fasthttp.RequestCtx, params map[string]string, values ..
 			"param":         module.GetParam,
 		},
 	}
+}
+
+// ReadBody reads the request body and push it as stromg
+func (h *HTTPModule) ReadBody(state *glua.LState) int {
+	state.Push(glua.LString(string(h.RequestContext.PostBody())))
+	return 1
 }
 
 // ServeFile serves the given file
