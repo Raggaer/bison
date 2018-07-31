@@ -1,9 +1,12 @@
-package main
+package test
 
 import (
+	"io"
 	"log"
+	"net"
 	"net/http"
 	"path/filepath"
+	"testing"
 
 	"github.com/buaazp/fasthttprouter"
 	"github.com/raggaer/bison/app/config"
@@ -11,25 +14,26 @@ import (
 	"github.com/raggaer/bison/app/lua"
 	"github.com/raggaer/bison/app/router"
 	"github.com/raggaer/bison/app/template"
-
 	"github.com/valyala/fasthttp"
 )
 
-func main() {
+func createTestServer(p chan<- int, t *testing.T) io.Closer {
+	t.Parallel()
 	// Load config file
-	config, err := config.LoadConfig(filepath.Join("app", "config", "config.lua"))
+	config, err := config.LoadConfig(filepath.Join("config.lua"))
 	if err != nil {
 		log.Fatal(err)
 	}
+	config.TestMode = true
 
 	// Compile all lua files
-	files, err := lua.CompileFiles(filepath.Join("app", "controllers"))
+	files, err := lua.CompileFiles(filepath.Join("controllers"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Load all templates
-	tpl, err := template.LoadTemplates(filepath.Join("app", "views"), &template.TemplateFuncData{
+	tpl, err := template.LoadTemplates(filepath.Join("views"), &template.TemplateFuncData{
 		Config: config,
 		Files:  files,
 	})
@@ -39,7 +43,7 @@ func main() {
 
 	// Create fasthttp router
 	r := fasthttprouter.New()
-	routes, err := router.LoadRoutes(filepath.Join("app", "router", "router.lua"))
+	routes, err := router.LoadRoutes(filepath.Join("router.lua"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -60,10 +64,12 @@ func main() {
 			r.POST(rx.Path, handler.MainRoute)
 		}
 	}
-	if config.DevMode {
-		log.Println("Running development mode - bison listening on address '" + config.Address + "'")
-	} else {
-		log.Println("bison listening on address '" + config.Address + "'")
+
+	ln, err := net.Listen("tcp", ":0")
+	if err != nil {
+		t.Fatalf("cannot start tcp server on port %d: %s", 0, err)
 	}
-	fasthttp.ListenAndServe(config.Address, r.Handler)
+	p <- ln.Addr().(*net.TCPAddr).Port
+	go fasthttp.Serve(ln, r.Handler)
+	return ln
 }

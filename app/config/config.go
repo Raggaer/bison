@@ -9,9 +9,10 @@ import (
 
 // Config struct used for all configuration options
 type Config struct {
-	Address string
-	DevMode bool
-	Custom  map[string]interface{}
+	Address  string
+	DevMode  bool
+	TestMode bool
+	Custom   map[string]interface{}
 }
 
 // LoadConfig loads the given config.lua file

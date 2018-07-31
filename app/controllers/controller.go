@@ -39,7 +39,7 @@ func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 			return
 		}
 		h.Files = luaFiles
-		tpl, err := template.LoadTemplates(&template.TemplateFuncData{
+		tpl, err := template.LoadTemplates(filepath.Join("app", "views"), &template.TemplateFuncData{
 			Config: h.Config,
 			Files:  h.Files,
 		})
@@ -59,7 +59,12 @@ func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 	route := router.RetrieveCurrentRoute(params, string(ctx.Method()), string(ctx.Path()), h.Routes)
 
 	// Retrieve compiled file for this route
-	proto, ok := h.Files[filepath.Join("app", "controllers", route.File)]
+	p := filepath.Join("app", "controllers", route.File)
+	if h.Config.TestMode {
+		p = filepath.Join("controllers", route.File)
+	}
+	fmt.Println(p)
+	proto, ok := h.Files[p]
 	if !ok {
 		ctx.NotFound()
 		return

@@ -18,10 +18,10 @@ type TemplateFuncData struct {
 }
 
 // LoadTemplates load the given view directory
-func LoadTemplates(data *TemplateFuncData) (*template.Template, error) {
+func LoadTemplates(dir string, data *TemplateFuncData) (*template.Template, error) {
 	tpl := template.New("bison")
 	tpl.Funcs(templateFuncMap(data))
-	err := filepath.Walk(filepath.Join("app", "views"), func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil
 		}
