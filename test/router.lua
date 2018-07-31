@@ -4,6 +4,9 @@ local router = {
   },
   ['/http/write'] = {
     get = 'http/write.lua'
+  },
+  ['/http/request_method'] = {
+    get = 'http/request_method.lua'
   }
 }
 
