@@ -25,6 +25,9 @@ local router = {
   },
   ['/http/remote_address'] = {
     get = 'http/remote_address.lua'
+  },
+  ['/config/get'] = {
+    get = 'config/get.lua'
   }
 }
 
