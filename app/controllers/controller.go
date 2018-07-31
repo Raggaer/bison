@@ -1,41 +1,45 @@
-package main
+package controllers
 
 import (
 	"fmt"
-	"html/template"
+	tpl "html/template"
 	"log"
 	"path/filepath"
 
-	"github.com/raggaer/bison/lua"
+	"github.com/raggaer/bison/app/template"
+
+	"github.com/raggaer/bison/app/config"
+	"github.com/raggaer/bison/app/lua"
+	"github.com/raggaer/bison/app/router"
 	glua "github.com/tul/gopher-lua"
 	"github.com/valyala/fasthttp"
 )
 
 // Handler main fasthttp handler
 type Handler struct {
-	Config *Config
-	Routes []*Route
+	Config *config.Config
+	Routes []*router.Route
 	Files  map[string]*glua.FunctionProto
-	Tpl    *template.Template
+	Tpl    *tpl.Template
 }
 
 // MainRoute handles all http requests
 func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 	// If we are running under development mode reload stuff
 	if h.Config.DevMode {
-		routes, err := loadRoutes()
+		routes, err := router.LoadRoutes(filepath.Join("app", "router", "router.lua"))
 		if err != nil {
 			ctx.Error("Unable to reload routes", 500)
 			return
 		}
 		h.Routes = routes
-		luaFiles, err := lua.CompileFiles("controllers")
+		luaFiles, err := lua.CompileFiles(filepath.Join("app", "controllers"))
 		if err != nil {
 			ctx.Error("Unable to reload controllers", 500)
 			return
 		}
 		h.Files = luaFiles
-		tpl, err := loadTemplates(&TemplateFuncData{
+		tpl, err := template.LoadTemplates(&template.TemplateFuncData{
 			Config: h.Config,
 			Files:  h.Files,
 		})
@@ -52,10 +56,10 @@ func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 	ctx.VisitUserValues(func(b []byte, i interface{}) {
 		params[string(b)] = fmt.Sprint(i)
 	})
-	route := retrieveCurrentRoute(params, string(ctx.Method()), string(ctx.Path()), h.Routes)
+	route := router.RetrieveCurrentRoute(params, string(ctx.Method()), string(ctx.Path()), h.Routes)
 
 	// Retrieve compiled file for this route
-	proto, ok := h.Files[filepath.Join("controllers", route.File)]
+	proto, ok := h.Files[filepath.Join("app", "controllers", route.File)]
 	if !ok {
 		ctx.NotFound()
 		return

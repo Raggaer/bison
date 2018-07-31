@@ -1,0 +1,6 @@
+local c = require('config')
+local req = require('http')
+local template = require('template')
+print(req.method())
+print(req.uri())
+template.render("test.html", nil)

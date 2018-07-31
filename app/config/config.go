@@ -1,9 +1,9 @@
-package main
+package config
 
 import (
 	"fmt"
 
-	"github.com/raggaer/bison/lua"
+	"github.com/raggaer/bison/app/lua"
 	glua "github.com/tul/gopher-lua"
 )
 
@@ -14,11 +14,12 @@ type Config struct {
 	Custom  map[string]interface{}
 }
 
-func loadConfig() (*Config, error) {
+// LoadConfig loads the given config.lua file
+func LoadConfig(path string) (*Config, error) {
 	configState := glua.NewState()
 
 	defer configState.Close()
-	if err := configState.DoFile("config.lua"); err != nil {
+	if err := configState.DoFile(path); err != nil {
 		return nil, err
 	}
 	configTable := configState.Get(-1)

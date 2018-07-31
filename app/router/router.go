@@ -1,11 +1,11 @@
-package main
+package router
 
 import (
 	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/raggaer/bison/lua"
+	"github.com/raggaer/bison/app/lua"
 	glua "github.com/tul/gopher-lua"
 )
 
@@ -16,11 +16,12 @@ type Route struct {
 	File   string
 }
 
-func loadRoutes() ([]*Route, error) {
+// LoadRoutes loads the given path router file
+func LoadRoutes(path string) ([]*Route, error) {
 	routerState := glua.NewState()
 
 	defer routerState.Close()
-	if err := routerState.DoFile("router.lua"); err != nil {
+	if err := routerState.DoFile(path); err != nil {
 		return nil, err
 	}
 	routerTable := routerState.Get(-1)
@@ -64,7 +65,8 @@ func createRoutes(m map[string]interface{}) []*Route {
 	return dst
 }
 
-func retrieveCurrentRoute(params map[string]string, method, uri string, routes []*Route) *Route {
+// RetrieveCurrentRoute retrieves the current used router by the request params
+func RetrieveCurrentRoute(params map[string]string, method, uri string, routes []*Route) *Route {
 	for _, route := range routes {
 		// Build the current route
 		n := ""

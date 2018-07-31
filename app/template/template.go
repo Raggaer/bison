@@ -1,4 +1,4 @@
-package main
+package template
 
 import (
 	"html/template"
@@ -6,20 +6,22 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/raggaer/bison/lua"
+	"github.com/raggaer/bison/app/config"
+	"github.com/raggaer/bison/app/lua"
 	glua "github.com/tul/gopher-lua"
 )
 
 // TemplateFuncData data needed for template functions
 type TemplateFuncData struct {
-	Config *Config
+	Config *config.Config
 	Files  map[string]*glua.FunctionProto
 }
 
-func loadTemplates(data *TemplateFuncData) (*template.Template, error) {
+// LoadTemplates load the given view directory
+func LoadTemplates(data *TemplateFuncData) (*template.Template, error) {
 	tpl := template.New("bison")
 	tpl.Funcs(templateFuncMap(data))
-	err := filepath.Walk("views", func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(filepath.Join("app", "views"), func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil
 		}
