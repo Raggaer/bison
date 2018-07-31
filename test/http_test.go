@@ -42,6 +42,7 @@ func TestHTTPWrite(t *testing.T) {
 	}
 }
 
+// TestHTTPGetRequestMethod test the http module method function
 func TestHTTPGetRequestMethod(t *testing.T) {
 	port := make(chan int, 1)
 	defer createTestServer(port, t).Close()
@@ -57,5 +58,43 @@ func TestHTTPGetRequestMethod(t *testing.T) {
 	}
 	if strings.ToLower(string(bodyContent)) != "get" {
 		t.Fatalf("Wrong http.method value. Expected 'get' but got '%s'", strings.ToLower(string(bodyContent)))
+	}
+}
+
+// TestHTTPGetRelativeURL test the http module uri function
+func TestHTTPGetRelativeURL(t *testing.T) {
+	port := make(chan int, 1)
+	defer createTestServer(port, t).Close()
+	addr := <-port
+	resp, err := http.Get(fmt.Sprintf("http://localhost:%d/http/uri", addr))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	bodyContent, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(bodyContent) != "/http/uri" {
+		t.Fatalf("Wrong http.method value. Expected '/http/uri' but got '%s'", string(bodyContent))
+	}
+}
+
+// TestHTTPParam test the http module param function
+func TestHTTPParam(t *testing.T) {
+	port := make(chan int, 1)
+	defer createTestServer(port, t).Close()
+	addr := <-port
+	resp, err := http.Get(fmt.Sprintf("http://localhost:%d/http/param/raggaer", addr))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	bodyContent, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(bodyContent) != "raggaer" {
+		t.Fatalf("Wrong http.param value. Expected 'raggaer' but got '%s'", string(bodyContent))
 	}
 }

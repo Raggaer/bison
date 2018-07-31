@@ -7,6 +7,12 @@ local router = {
   },
   ['/http/request_method'] = {
     get = 'http/request_method.lua'
+  },
+  ['/http/uri'] = {
+    get = 'http/uri.lua'
+  },
+  ['/http/param/:name'] = {
+    get = 'http/param.lua'
   }
 }
 
