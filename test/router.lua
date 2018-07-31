@@ -13,6 +13,9 @@ local router = {
   },
   ['/http/param/:name'] = {
     get = 'http/param.lua'
+  },
+  ['/http/serve_file'] = {
+    get = 'http/serve_file.lua'
   }
 }
 

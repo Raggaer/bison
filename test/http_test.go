@@ -98,3 +98,22 @@ func TestHTTPParam(t *testing.T) {
 		t.Fatalf("Wrong http.param value. Expected 'raggaer' but got '%s'", string(bodyContent))
 	}
 }
+
+// TestHTTPServeFile test the http module serveFile function
+func TestHTTPServeFile(t *testing.T) {
+	port := make(chan int, 1)
+	defer createTestServer(port, t).Close()
+	addr := <-port
+	resp, err := http.Get(fmt.Sprintf("http://localhost:%d/http/serve_file", addr))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	bodyContent, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(bodyContent) != "Serving a file from lua" {
+		t.Fatalf("Wrong http.param value. Expected 'Serving a file from lua' but got '%s'", string(bodyContent))
+	}
+}
