@@ -26,5 +26,5 @@ that should be executed
 
 ## Testing
 
-All the testing is done on the `test` folder, where a simple example of how `bison` works is located. Every lua module is tested, on each test a fasthttp server is created with a random port
+All the testing is done on the `test` folder, where a simple example of how `bison` works is located. Every lua module is tested, on each test a fasthttp server is created with a random port.
 Then a request is simulated using `net/http` package
