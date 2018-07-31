@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/http/cookiejar"
 	"strings"
 	"testing"
 )
@@ -115,5 +116,78 @@ func TestHTTPServeFile(t *testing.T) {
 	}
 	if string(bodyContent) != "Serving a file from lua" {
 		t.Fatalf("Wrong http.param value. Expected 'Serving a file from lua' but got '%s'", string(bodyContent))
+	}
+}
+
+// TestHTTPSetCookie test the http module setCookie function
+func TestHTTPSetCookie(t *testing.T) {
+	port := make(chan int, 1)
+	defer createTestServer(port, t).Close()
+	addr := <-port
+	resp, err := http.Get(fmt.Sprintf("http://localhost:%d/http/set_cookie", addr))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		t.Fatalf("Wrong http.setCookie status code. Expected '200' but got %d", resp.StatusCode)
+	}
+}
+
+// TestHTTPGetCookie test the http module getCookie function
+func TestHTTPGetCookie(t *testing.T) {
+	// Create a http client with a cookiejar
+	jar, err := cookiejar.New(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	client := &http.Client{
+		Jar: jar,
+	}
+
+	// First set a cookie
+	port := make(chan int, 1)
+	defer createTestServer(port, t).Close()
+	addr := <-port
+	resps, err := client.Get(fmt.Sprintf("http://localhost:%d/http/set_cookie", addr))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resps.Body.Close()
+	if resps.StatusCode != 200 {
+		t.Fatalf("Wrong http.setCookie status code. Expected '200' but got %d", resps.StatusCode)
+	}
+
+	// Finally retrieve a cookie
+	respg, err := client.Get(fmt.Sprintf("http://localhost:%d/http/get_cookie", addr))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer respg.Body.Close()
+	bodyContent, err := ioutil.ReadAll(respg.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(bodyContent) != "Testing http.setCookie function" {
+		t.Fatalf("Wrong http.getCookie value. Expected 'Testing http.setCookie function' but got '%s'", string(bodyContent))
+	}
+}
+
+// TestHTTPRemoteAddress test the http module remoteAddress function
+func TestHTTPRemoteAddress(t *testing.T) {
+	port := make(chan int, 1)
+	defer createTestServer(port, t).Close()
+	addr := <-port
+	resp, err := http.Get(fmt.Sprintf("http://localhost:%d/http/remote_address", addr))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	bodyContent, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(bodyContent) != "::1" {
+		t.Fatalf("Wrong http.param value. Expected '::1' but got '%s'", string(bodyContent))
 	}
 }

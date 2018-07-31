@@ -16,6 +16,15 @@ local router = {
   },
   ['/http/serve_file'] = {
     get = 'http/serve_file.lua'
+  },
+  ['/http/set_cookie'] = {
+    get = 'http/set_cookie.lua'
+  },
+  ['/http/get_cookie'] = {
+    get = 'http/get_cookie.lua'
+  },
+  ['/http/remote_address'] = {
+    get = 'http/remote_address.lua'
   }
 }
 
