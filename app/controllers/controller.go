@@ -6,11 +6,11 @@ import (
 	"log"
 	"path/filepath"
 
-	"github.com/raggaer/bison/app/template"
-
+	"github.com/patrickmn/go-cache"
 	"github.com/raggaer/bison/app/config"
 	"github.com/raggaer/bison/app/lua"
 	"github.com/raggaer/bison/app/router"
+	"github.com/raggaer/bison/app/template"
 	glua "github.com/tul/gopher-lua"
 	"github.com/valyala/fasthttp"
 )
@@ -21,6 +21,7 @@ type Handler struct {
 	Routes []*router.Route
 	Files  map[string]*glua.FunctionProto
 	Tpl    *tpl.Template
+	Cache  *cache.Cache
 }
 
 // MainRoute handles all http requests
