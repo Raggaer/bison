@@ -75,6 +75,7 @@ func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 		lua.NewHTTPModule(ctx, params),
 		lua.NewConfigModule(h.Config.Custom),
 		lua.NewTemplateModule(h.Tpl, ctx),
+		lua.NewURLModule(),
 	})
 	defer state.Close()
 

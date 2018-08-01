@@ -31,6 +31,18 @@ local router = {
   },
   ['/template/render'] = {
     get = 'template/render.lua'
+  },
+  ['/url/query_escape'] = {
+    get = 'url/query_escape.lua'
+  },
+  ['/url/query_unescape'] = {
+    get = 'url/query_unescape.lua'
+  },
+  ['/url/path_escape'] = {
+    get = 'url/path_escape.lua'
+  },
+  ['/url/path_unescape'] = {
+    get = 'url/path_unescape.lua'
   }
 }
 
