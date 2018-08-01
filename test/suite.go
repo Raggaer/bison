@@ -7,8 +7,10 @@ import (
 	"net/http"
 	"path/filepath"
 	"testing"
+	"time"
 
 	"github.com/buaazp/fasthttprouter"
+	"github.com/patrickmn/go-cache"
 	"github.com/raggaer/bison/app/config"
 	"github.com/raggaer/bison/app/controllers"
 	"github.com/raggaer/bison/app/lua"
@@ -54,6 +56,7 @@ func createTestServer(p chan<- int, t *testing.T) io.Closer {
 		Routes: routes,
 		Files:  files,
 		Tpl:    tpl,
+		Cache:  cache.New(time.Minute*5, time.Minute*10),
 	}
 
 	for _, rx := range routes {

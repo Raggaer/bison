@@ -43,6 +43,12 @@ local router = {
   },
   ['/url/path_unescape'] = {
     get = 'url/path_unescape.lua'
+  },
+  ['/cache/set'] = {
+    get = 'cache/set.lua'
+  },
+  ['/cache/get'] = {
+    get = 'cache/get.lua'
   }
 }
 
