@@ -28,6 +28,9 @@ local router = {
   },
   ['/config/get'] = {
     get = 'config/get.lua'
+  },
+  ['/template/render'] = {
+    get = 'template/render.lua'
   }
 }
 
