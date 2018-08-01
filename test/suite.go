@@ -20,7 +20,7 @@ import (
 func createTestServer(p chan<- int, t *testing.T) io.Closer {
 	t.Parallel()
 	// Load config file
-	config, err := config.LoadConfig(filepath.Join("config.lua"))
+	config, err := config.LoadConfig(filepath.Join("config", "config.lua"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,7 +43,7 @@ func createTestServer(p chan<- int, t *testing.T) io.Closer {
 
 	// Create fasthttp router
 	r := fasthttprouter.New()
-	routes, err := router.LoadRoutes(filepath.Join("router.lua"))
+	routes, err := router.LoadRoutes(filepath.Join("router", "router.lua"))
 	if err != nil {
 		log.Fatal(err)
 	}
