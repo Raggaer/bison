@@ -49,6 +49,12 @@ local router = {
   },
   ['/cache/get'] = {
     get = 'cache/get.lua'
+  },
+  ['/session/get'] = {
+    get = 'session/get.lua'
+  },
+  ['/session/set'] = {
+    get = 'session/set.lua'
   }
 }
 

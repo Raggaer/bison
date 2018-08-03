@@ -6,6 +6,7 @@ import (
 	"log"
 	"path/filepath"
 
+	"github.com/fasthttp-contrib/sessions"
 	"github.com/patrickmn/go-cache"
 	"github.com/raggaer/bison/app/config"
 	"github.com/raggaer/bison/app/lua"
@@ -52,6 +53,9 @@ func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 		h.Tpl = tpl
 	}
 
+	// Start fasthttp session
+	session := sessions.StartFasthttp(ctx)
+
 	// Retrieve current route
 	params := map[string]string{}
 	ctx.VisitUserValues(func(b []byte, i interface{}) {
@@ -64,7 +68,7 @@ func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 	if h.Config.TestMode {
 		p = filepath.Join("controllers", route.File)
 	}
-	fmt.Println(p)
+
 	proto, ok := h.Files[p]
 	if !ok {
 		ctx.NotFound()
@@ -78,6 +82,7 @@ func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 		lua.NewTemplateModule(h.Tpl, ctx),
 		lua.NewURLModule(),
 		lua.NewCacheModule(h.Cache),
+		lua.NewSessionModule(session),
 	})
 	defer state.Close()
 
