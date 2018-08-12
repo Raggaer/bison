@@ -16,7 +16,8 @@ func NewJSONModule() *Module {
 		Name: "json",
 		Data: module,
 		Funcs: map[string]glua.LGFunction{
-			"marshal": module.MarshalJSON,
+			"marshal":   module.MarshalJSON,
+			"unmarshal": module.UnmarshalJSON,
 		},
 	}
 }
@@ -31,5 +32,17 @@ func (j *JSONModule) MarshalJSON(state *glua.LState) int {
 		return 0
 	}
 	state.Push(glua.LString(string(buff)))
+	return 1
+}
+
+// UnmarshalJSON unmarshals the given JSON string into a lua table
+func (j *JSONModule) UnmarshalJSON(state *glua.LState) int {
+	data := state.ToString(1)
+	result, err := mxj.NewMapJson([]byte(data))
+	if err != nil {
+		state.RaiseError("Unable to unmarshal JSON string - %s", err)
+		return 0
+	}
+	state.Push(MapToTable(result))
 	return 1
 }

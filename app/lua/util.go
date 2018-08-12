@@ -10,6 +10,15 @@ import (
 	"github.com/yuin/gopher-lua/parse"
 )
 
+func MapToTable(dst map[string]interface{}) *glua.LTable {
+	src := &glua.LTable{}
+	for k, e := range dst {
+		v := GoValueToLua(e)
+		src.RawSetString(k, v)
+	}
+	return src
+}
+
 // TableToMap converts a lua table into a go map[string]interface
 func TableToMap(src *glua.LTable) map[string]interface{} {
 	if src == nil {

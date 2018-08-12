@@ -55,7 +55,13 @@ local router = {
   },
   ['/session/set'] = {
     get = 'session/set.lua'
-  }
+  },
+  ['/json/marshal'] = {
+    get = 'json/marshal.lua'
+  },
+  ['/json/unmarshal'] = {
+    get = 'json/unmarshal.lua'
+  },
 }
 
 return router
