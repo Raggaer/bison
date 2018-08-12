@@ -61,7 +61,7 @@ local router = {
   },
   ['/json/unmarshal'] = {
     get = 'json/unmarshal.lua'
-  },
+  }
 }
 
 return router
