@@ -83,6 +83,7 @@ func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 		lua.NewURLModule(),
 		lua.NewCacheModule(h.Cache),
 		lua.NewSessionModule(session),
+		lua.NewJSONModule(),
 	})
 	defer state.Close()
 
