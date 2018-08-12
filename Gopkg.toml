@@ -38,7 +38,7 @@
   version = "2.1.0"
 
 [[constraint]]
-  branch = "master"
+  branch = "shared_byte_code_readme"
   name = "github.com/tul/gopher-lua"
 
 [[constraint]]

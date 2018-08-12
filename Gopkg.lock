@@ -46,12 +46,12 @@
   version = "v2.1.0"
 
 [[projects]]
-  branch = "master"
-  digest = "1:c83296702a347da4c86d5368ff50062c4076aa387171ef1c497454726af4a598"
+  branch = "shared_byte_code_readme"
+  digest = "1:5648fd031fbf276091d7520ab3ced6116c1e638b7eede58db8f4102706e407d0"
   name = "github.com/tul/gopher-lua"
   packages = ["."]
   pruneopts = "UT"
-  revision = "46796da1b0b4794e1e341883a399f12cc7574b55"
+  revision = "7a6135d85e95b76c9f304a56804402c829273f0f"
 
 [[projects]]
   branch = "master"
