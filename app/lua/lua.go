@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	glua "github.com/tul/gopher-lua"
+	glua "github.com/yuin/gopher-lua"
 )
 
 // Module represents a lua module

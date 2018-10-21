@@ -1,7 +1,10 @@
 package lua
 
-import glua "github.com/tul/gopher-lua"
-import "net/url"
+import (
+	"net/url"
+
+	glua "github.com/yuin/gopher-lua"
+)
 
 // URLModule module for some url manipulation actions
 type URLModule struct {

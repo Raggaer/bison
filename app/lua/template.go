@@ -3,8 +3,8 @@ package lua
 import (
 	"html/template"
 
-	glua "github.com/tul/gopher-lua"
 	"github.com/valyala/fasthttp"
+	glua "github.com/yuin/gopher-lua"
 )
 
 // TemplateModule defines a html template module

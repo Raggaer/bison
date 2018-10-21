@@ -2,7 +2,7 @@ package lua
 
 import (
 	"github.com/fasthttp-contrib/sessions"
-	glua "github.com/tul/gopher-lua"
+	glua "github.com/yuin/gopher-lua"
 )
 
 // SessionModule defines a request session module

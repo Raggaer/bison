@@ -2,7 +2,7 @@ package lua
 
 import (
 	"github.com/clbanning/mxj"
-	glua "github.com/tul/gopher-lua"
+	glua "github.com/yuin/gopher-lua"
 )
 
 // JSONModule provides access to json methods

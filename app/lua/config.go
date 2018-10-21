@@ -1,6 +1,6 @@
 package lua
 
-import glua "github.com/tul/gopher-lua"
+import glua "github.com/yuin/gopher-lua"
 
 // ConfigModule provides access to config values
 type ConfigModule struct {

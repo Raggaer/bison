@@ -6,7 +6,7 @@ import (
 	"math"
 	"os"
 
-	glua "github.com/tul/gopher-lua"
+	glua "github.com/yuin/gopher-lua"
 	"github.com/yuin/gopher-lua/parse"
 )
 

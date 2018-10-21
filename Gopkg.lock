@@ -10,6 +10,14 @@
   version = "v0.1.1"
 
 [[projects]]
+  digest = "1:ed1cddb8ae270d904004f7d38ec1d5605d1d67d2e427f65e81c51556142c24b0"
+  name = "github.com/clbanning/mxj"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "be7b154d093db491c61285049f46770a9075bc15"
+  version = "v1.8.2"
+
+[[projects]]
   branch = "master"
   digest = "1:f08b65ff92cb10d161e2568c3aa1681596de3d9339bde573441d7cb49b0b8d3d"
   name = "github.com/fasthttp-contrib/sessions"
@@ -46,20 +54,12 @@
   version = "v2.1.0"
 
 [[projects]]
-  branch = "shared_byte_code_readme"
-  digest = "1:5648fd031fbf276091d7520ab3ced6116c1e638b7eede58db8f4102706e407d0"
-  name = "github.com/tul/gopher-lua"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "7a6135d85e95b76c9f304a56804402c829273f0f"
-
-[[projects]]
-  branch = "master"
   digest = "1:c468422f334a6b46a19448ad59aaffdfc0a36b08fdcc1c749a0b29b6453d7e59"
   name = "github.com/valyala/bytebufferpool"
   packages = ["."]
   pruneopts = "UT"
   revision = "e746df99fe4a3986f4d4f79e13c1e0117ce9c2f7"
+  version = "v1.0.0"
 
 [[projects]]
   digest = "1:15ad8a80098fcc7a194b9db6b26d74072a852e4faa957848c8118193d3c69230"
@@ -75,25 +75,27 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:ae9ae88541802fd12ed07bc4de5b96d74044f66b9779e21d3be9e7d60400f0eb"
+  digest = "1:101563102603d02c79d31cd1da76c66ea8f4765e401560b519ead0b6e2a4bb7f"
   name = "github.com/yuin/gopher-lua"
   packages = [
+    ".",
     "ast",
     "parse",
     "pm",
   ]
   pruneopts = "UT"
-  revision = "46796da1b0b4794e1e341883a399f12cc7574b55"
+  revision = "f6fcaab0c612d877d4140cbdf6966aed51e6eebd"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
     "github.com/buaazp/fasthttprouter",
+    "github.com/clbanning/mxj",
     "github.com/fasthttp-contrib/sessions",
     "github.com/patrickmn/go-cache",
-    "github.com/tul/gopher-lua",
     "github.com/valyala/fasthttp",
+    "github.com/yuin/gopher-lua",
     "github.com/yuin/gopher-lua/parse",
   ]
   solver-name = "gps-cdcl"

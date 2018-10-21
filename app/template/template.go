@@ -8,7 +8,7 @@ import (
 
 	"github.com/raggaer/bison/app/config"
 	"github.com/raggaer/bison/app/lua"
-	glua "github.com/tul/gopher-lua"
+	glua "github.com/yuin/gopher-lua"
 )
 
 // TemplateFuncData data needed for template functions

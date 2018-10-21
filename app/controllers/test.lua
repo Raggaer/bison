@@ -1,6 +1,6 @@
 local c = require('config')
 local req = require('http')
 local template = require('template')
-print(req.method())
-print(req.uri())
+local session = require('session')
+session.set('hello', '123aa')
 template.render("test.html", nil)

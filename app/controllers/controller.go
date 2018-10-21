@@ -12,8 +12,8 @@ import (
 	"github.com/raggaer/bison/app/lua"
 	"github.com/raggaer/bison/app/router"
 	"github.com/raggaer/bison/app/template"
-	glua "github.com/tul/gopher-lua"
 	"github.com/valyala/fasthttp"
+	glua "github.com/yuin/gopher-lua"
 )
 
 // Handler main fasthttp handler

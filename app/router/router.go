@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/raggaer/bison/app/lua"
-	glua "github.com/tul/gopher-lua"
+	glua "github.com/yuin/gopher-lua"
 )
 
 // Route defines a lua route

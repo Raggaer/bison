@@ -1,3 +1,4 @@
+
 ===============================================================================
 GopherLua: VM and compiler for Lua in Go.
 ===============================================================================
@@ -55,7 +56,7 @@ Installation
 
    go get github.com/yuin/gopher-lua
 
-GopherLua supports >= Go1.8.
+GopherLua supports >= Go1.9.
 
 ----------------------------------------------------------------
 Usage
@@ -557,7 +558,7 @@ Sharing byte code is safe as it is read only and cannot be altered by lua script
     // DoCompiledFile takes a FunctionProto, as returned by CompileLua, and runs it in the LState. It is equivalent
     // to calling DoFile on the LState with the original source file.
     func DoCompiledFile(L *lua.LState, proto *lua.FunctionProto) error {
-        lfunc := &L.NewFunctionFromProto(proto)
+        lfunc := L.NewFunctionFromProto(proto)
         L.Push(lfunc)
         return L.PCall(0, lua.MultRet, nil)
     }
@@ -820,7 +821,7 @@ See `Guidlines for contributors <https://github.com/yuin/gopher-lua/tree/master/
 Libraries for GopherLua
 ----------------------------------------------------------------
 
-- `gopher-luar <https://github.com/layeh/gopher-luar>`_ : Custom type reflection for gopher-lua
+- `gopher-luar <https://github.com/layeh/gopher-luar>`_ : Simplifies data passing to and from gopher-lua
 - `gluamapper <https://github.com/yuin/gluamapper>`_ : Mapping a Lua table to a Go struct
 - `gluare <https://github.com/yuin/gluare>`_ : Regular expressions for gopher-lua
 - `gluahttp <https://github.com/cjoudrey/gluahttp>`_ : HTTP request module for gopher-lua
@@ -833,8 +834,10 @@ Libraries for GopherLua
 - `gluasocket <https://github.com/BixData/gluasocket>`_ : A LuaSocket library for the GopherLua VM
 - `gluabit32 <https://github.com/BixData/gluabit32>`_ : A native Go implementation of bit32 for the GopherLua VM.
 - `gmoonscript <https://github.com/rucuriousyet/gmoonscript>`_ : Moonscript Compiler for the Gopher Lua VM
-- `loguago <https://github.com/rucuriousyet/loguago>`_ : Zerolog wrapper for Gopher-Lua 
-
+- `loguago <https://github.com/rucuriousyet/loguago>`_ : Zerolog wrapper for Gopher-Lua
+- `gluacrypto <https://github.com/tengattack/gluacrypto>`_ : A native Go implementation of crypto library for the GopherLua VM.
+- `gluasql <https://github.com/tengattack/gluasql>`_ : A native Go implementation of SQL client for the GopherLua VM.
+- `purr <https://github.com/leyafo/purr>`_ : A http mock testing tool.
 ----------------------------------------------------------------
 Donation
 ----------------------------------------------------------------

@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/patrickmn/go-cache"
-	glua "github.com/tul/gopher-lua"
+	glua "github.com/yuin/gopher-lua"
 )
 
 // CacheModule provices access to the memory cache object

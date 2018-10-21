@@ -3,8 +3,8 @@ package lua
 import (
 	"fmt"
 
-	glua "github.com/tul/gopher-lua"
 	"github.com/valyala/fasthttp"
+	glua "github.com/yuin/gopher-lua"
 )
 
 // HTTPModule module for all http actions
