@@ -10,6 +10,7 @@ import (
 	"github.com/yuin/gopher-lua/parse"
 )
 
+// MapToTable converts a Go map into a lua table
 func MapToTable(dst map[string]interface{}) *glua.LTable {
 	src := &glua.LTable{}
 	for k, e := range dst {

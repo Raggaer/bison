@@ -36,6 +36,7 @@ func (u *URLModule) QueryUnescape(state *glua.LState) int {
 	p, err := url.QueryUnescape(state.ToString(1))
 	if err != nil {
 		state.RaiseError("Unable to unescape query %s - %v", state.ToString(1), err)
+		return 0
 	}
 	state.Push(glua.LString(p))
 	return 1
@@ -52,6 +53,7 @@ func (u *URLModule) PathUnescape(state *glua.LState) int {
 	p, err := url.PathUnescape(state.ToString(1))
 	if err != nil {
 		state.RaiseError("Unable to unescape path %s - %v", state.ToString(1), err)
+		return 0
 	}
 	state.Push(glua.LString(p))
 	return 1
