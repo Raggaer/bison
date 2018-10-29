@@ -61,6 +61,12 @@ local router = {
   },
   ['/json/unmarshal'] = {
     get = 'json/unmarshal.lua'
+  },
+  ['/env/set'] = {
+    get = 'env/set.lua'
+  },
+  ['/env/get'] = {
+    get = 'env/get.lua'
   }
 }
 
