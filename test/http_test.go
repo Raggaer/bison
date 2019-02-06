@@ -187,7 +187,7 @@ func TestHTTPRemoteAddress(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if string(bodyContent) != "::1" {
-		t.Fatalf("Wrong http.param value. Expected '::1' but got '%s'", string(bodyContent))
+	if string(bodyContent) != "::1" && string(bodyContent) != "127.0.0.1" {
+		t.Fatalf("Wrong http.param value. Expected '::1' or '127.0.0.1' but got '%s'", string(bodyContent))
 	}
 }

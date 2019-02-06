@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/fasthttp-contrib/sessions"
-	"github.com/patrickmn/go-cache"
+	cache "github.com/patrickmn/go-cache"
 	"github.com/raggaer/bison/app/config"
 	"github.com/raggaer/bison/app/lua"
 	"github.com/raggaer/bison/app/router"
@@ -46,7 +46,6 @@ func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 			Files:  h.Files,
 		})
 		if err != nil {
-			log.Println(err)
 			ctx.Error("Unable to reload templates", 500)
 			return
 		}
