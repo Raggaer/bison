@@ -21,7 +21,7 @@ return config
 There are some **mandatory** fields that need to be present on your configuration file:
 
 - `address`: The address where the http server will listen on
-- `devMode`: Development mode boolean, if enabled some features (like hot-reload lua files) enable, to make development easier
+- `devMode`: Development mode boolean, if enabled some features (like hot-reload lua files) will be activated, to make development easier
 
 After the mandatory fields are all setup you can declare any field (even use tables) and access them later using the `config` module 
 on your lua files
