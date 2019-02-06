@@ -4,3 +4,4 @@ app/router/router.lua
 *.swp
 *~
 *.swo
+bison
