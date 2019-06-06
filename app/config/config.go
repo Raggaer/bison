@@ -3,7 +3,7 @@ package config
 import (
 	"fmt"
 
-	"github.com/raggaer/bison/app/lua"
+	"github.com/Raggaer/bison/app/lua"
 	glua "github.com/yuin/gopher-lua"
 )
 

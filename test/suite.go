@@ -11,11 +11,11 @@ import (
 
 	"github.com/buaazp/fasthttprouter"
 	"github.com/patrickmn/go-cache"
-	"github.com/raggaer/bison/app/config"
-	"github.com/raggaer/bison/app/controllers"
-	"github.com/raggaer/bison/app/lua"
-	"github.com/raggaer/bison/app/router"
-	"github.com/raggaer/bison/app/template"
+	"github.com/Raggaer/bison/app/config"
+	"github.com/Raggaer/bison/app/controllers"
+	"github.com/Raggaer/bison/app/lua"
+	"github.com/Raggaer/bison/app/router"
+	"github.com/Raggaer/bison/app/template"
 	"github.com/valyala/fasthttp"
 )
 

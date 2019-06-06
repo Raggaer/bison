@@ -1,18 +1,19 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"path/filepath"
 	"time"
 
+	"github.com/Raggaer/bison/app/config"
+	"github.com/Raggaer/bison/app/controllers"
+	"github.com/Raggaer/bison/app/lua"
+	"github.com/Raggaer/bison/app/router"
+	"github.com/Raggaer/bison/app/template"
 	"github.com/buaazp/fasthttprouter"
-	"github.com/patrickmn/go-cache"
-	"github.com/raggaer/bison/app/config"
-	"github.com/raggaer/bison/app/controllers"
-	"github.com/raggaer/bison/app/lua"
-	"github.com/raggaer/bison/app/router"
-	"github.com/raggaer/bison/app/template"
+	cache "github.com/patrickmn/go-cache"
 
 	"github.com/valyala/fasthttp"
 )
@@ -64,9 +65,9 @@ func main() {
 		}
 	}
 	if config.DevMode {
-		log.Println("Running development mode - bison listening on address '" + config.Address + "'")
+		fmt.Println("Running development mode - bison listening on address '" + config.Address + "'")
 	} else {
-		log.Println("bison listening on address '" + config.Address + "'")
+		fmt.Println("bison listening on address '" + config.Address + "'")
 	}
 	fasthttp.ListenAndServe(config.Address, r.Handler)
 }
