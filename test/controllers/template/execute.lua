@@ -1,4 +1,4 @@
 local tpl = require('template')
-tpl.render('test.html', {
+tpl.render('execute.html', {
   author = 'Raggaer'
 })

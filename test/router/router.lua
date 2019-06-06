@@ -32,6 +32,9 @@ local router = {
   ['/template/render'] = {
     get = 'template/render.lua'
   },
+  ['/template/execute'] = {
+    get = 'template/execute.lua'
+  },
   ['/url/query_escape'] = {
     get = 'url/query_escape.lua'
   },

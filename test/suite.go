@@ -9,13 +9,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/buaazp/fasthttprouter"
-	"github.com/patrickmn/go-cache"
 	"github.com/Raggaer/bison/app/config"
 	"github.com/Raggaer/bison/app/controllers"
 	"github.com/Raggaer/bison/app/lua"
 	"github.com/Raggaer/bison/app/router"
 	"github.com/Raggaer/bison/app/template"
+	"github.com/buaazp/fasthttprouter"
+	cache "github.com/patrickmn/go-cache"
 	"github.com/valyala/fasthttp"
 )
 
