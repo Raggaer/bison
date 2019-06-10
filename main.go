@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"net/http"
 	"path/filepath"
 	"time"
@@ -37,7 +36,8 @@ func main() {
 	}
 	config, err := config.LoadConfig(configPath)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("Unable to load config.lua file: %v", err)
+		return
 	}
 
 	// Compile all lua files
@@ -46,7 +46,8 @@ func main() {
 	}
 	files, err := lua.CompileFiles(controllersPath)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("Unable to compile controller files: %v", err)
+		return
 	}
 
 	// Load all templates
@@ -58,7 +59,8 @@ func main() {
 		Files:  files,
 	})
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("Unable to load views files: %v", err)
+		return
 	}
 
 	// Create fasthttp router
@@ -68,16 +70,21 @@ func main() {
 	r := fasthttprouter.New()
 	routes, err := router.LoadRoutes(routerPath)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("Unable to load routes: %v", err)
+		return
 	}
 
 	// Create fasthttp server
 	handler := &controllers.Handler{
-		Config: config,
-		Routes: routes,
-		Files:  files,
-		Tpl:    tpl,
-		Cache:  cache.New(time.Minute*5, time.Minute*10),
+		Config:          config,
+		Routes:          routes,
+		Files:           files,
+		Tpl:             tpl,
+		Cache:           cache.New(time.Minute*5, time.Minute*10),
+		ControllersPath: controllersPath,
+		RouterPath:      routerPath,
+		ViewsPath:       viewsPath,
+		ConfigPath:      configPath,
 	}
 
 	for _, rx := range routes {

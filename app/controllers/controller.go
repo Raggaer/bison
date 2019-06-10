@@ -18,30 +18,34 @@ import (
 
 // Handler main fasthttp handler
 type Handler struct {
-	Config *config.Config
-	Routes []*router.Route
-	Files  map[string]*glua.FunctionProto
-	Tpl    *tpl.Template
-	Cache  *cache.Cache
+	Config          *config.Config
+	Routes          []*router.Route
+	Files           map[string]*glua.FunctionProto
+	Tpl             *tpl.Template
+	Cache           *cache.Cache
+	ControllersPath string
+	RouterPath      string
+	ConfigPath      string
+	ViewsPath       string
 }
 
 // MainRoute handles all http requests
 func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 	// If we are running under development mode reload stuff
 	if h.Config.DevMode {
-		routes, err := router.LoadRoutes(filepath.Join("app", "router", "router.lua"))
+		routes, err := router.LoadRoutes(h.RouterPath)
 		if err != nil {
 			ctx.Error("Unable to reload routes", 500)
 			return
 		}
 		h.Routes = routes
-		luaFiles, err := lua.CompileFiles(filepath.Join("app", "controllers"))
+		luaFiles, err := lua.CompileFiles(h.ControllersPath)
 		if err != nil {
 			ctx.Error("Unable to reload controllers", 500)
 			return
 		}
 		h.Files = luaFiles
-		tpl, err := template.LoadTemplates(filepath.Join("app", "views"), &template.TemplateFuncData{
+		tpl, err := template.LoadTemplates(h.ViewsPath, &template.TemplateFuncData{
 			Config: h.Config,
 			Files:  h.Files,
 		})
@@ -63,7 +67,7 @@ func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 	route := router.RetrieveCurrentRoute(params, string(ctx.Method()), string(ctx.Path()), h.Routes)
 
 	// Retrieve compiled file for this route
-	p := filepath.Join("app", "controllers", route.File)
+	p := filepath.Join(h.ControllersPath, route.File)
 	if h.Config.TestMode {
 		p = filepath.Join("controllers", route.File)
 	}
