@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -19,20 +20,40 @@ import (
 )
 
 func main() {
+	var controllersPath string
+	flag.StringVar(&controllersPath, "controllers", "", "Filepath for your controllers folder. Default 'app/controllers'")
+	var configPath string
+	flag.StringVar(&configPath, "config", "", "Filepath for your config file. Default 'app/config/config.lua'")
+	var viewsPath string
+	flag.StringVar(&viewsPath, "views", "", "Filepath for your views folder. Default 'app/views'")
+	var routerPath string
+	flag.StringVar(&routerPath, "router", "", "Filepath for your router file. Default 'app/router/router.lua'")
+
+	flag.Parse()
+
 	// Load config file
-	config, err := config.LoadConfig(filepath.Join("app", "config", "config.lua"))
+	if configPath == "" {
+		configPath = filepath.Join("app", "config", "config.lua")
+	}
+	config, err := config.LoadConfig(configPath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Compile all lua files
-	files, err := lua.CompileFiles(filepath.Join("app", "controllers"))
+	if controllersPath == "" {
+		controllersPath = filepath.Join("app", "controllers")
+	}
+	files, err := lua.CompileFiles(controllersPath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Load all templates
-	tpl, err := template.LoadTemplates(filepath.Join("app", "views"), &template.TemplateFuncData{
+	if viewsPath == "" {
+		viewsPath = filepath.Join("app", "views")
+	}
+	tpl, err := template.LoadTemplates(viewsPath, &template.TemplateFuncData{
 		Config: config,
 		Files:  files,
 	})
@@ -41,8 +62,11 @@ func main() {
 	}
 
 	// Create fasthttp router
+	if routerPath == "" {
+		routerPath = filepath.Join("app", "router", "router.lua")
+	}
 	r := fasthttprouter.New()
-	routes, err := router.LoadRoutes(filepath.Join("app", "router", "router.lua"))
+	routes, err := router.LoadRoutes(routerPath)
 	if err != nil {
 		log.Fatal(err)
 	}
