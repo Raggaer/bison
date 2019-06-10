@@ -62,7 +62,7 @@ func LuaValueToGo(dst glua.LValue) interface{} {
 	case glua.LString:
 		return string(v)
 	case glua.LNumber:
-		// gopher-lua converts numbers are float64
+		// gopher-lua converts numbers as float64
 		// we check if the number needs to be a float64
 		if isNumberFloat(v) {
 			return float64(v)
@@ -121,7 +121,7 @@ func CompileLua(filePath string) (*glua.FunctionProto, error) {
 }
 
 // DoCompiledFile takes a FunctionProto, as returned by CompileLua, and runs it in the LState. It is equivalent
-// to calling DoFile on the LState with the original source file.
+// to calling DoFile on the LState with the original source file
 func DoCompiledFile(state *glua.LState, proto *glua.FunctionProto) error {
 	lfunc := state.NewFunctionFromProto(proto)
 	state.Push(lfunc)
