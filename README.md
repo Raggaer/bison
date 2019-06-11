@@ -52,3 +52,7 @@ All the testing is done on the `test` folder, where a simple example of how `bis
 Then a request is simulated using `net/http` package
 
 Since the testing package is basically a `bison` application, it can be used as a base/example on how should your directory structure look like
+
+## Example
+
+You can find a complete of how to make an application using `bison` on the `example` directory.

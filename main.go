@@ -50,13 +50,17 @@ func main() {
 		return
 	}
 
+	cacheStorage := cache.New(time.Minute*5, time.Minute*10)
+
 	// Load all templates
 	if viewsPath == "" {
 		viewsPath = filepath.Join("app", "views")
 	}
 	tpl, err := template.LoadTemplates(viewsPath, &template.TemplateFuncData{
-		Config: config,
-		Files:  files,
+		Config:          config,
+		Cache:           cacheStorage,
+		Files:           files,
+		ControllersPath: controllersPath,
 	})
 	if err != nil {
 		fmt.Printf("Unable to load views files: %v", err)
@@ -80,7 +84,7 @@ func main() {
 		Routes:          routes,
 		Files:           files,
 		Tpl:             tpl,
-		Cache:           cache.New(time.Minute*5, time.Minute*10),
+		Cache:           cacheStorage,
 		ControllersPath: controllersPath,
 		RouterPath:      routerPath,
 		ViewsPath:       viewsPath,

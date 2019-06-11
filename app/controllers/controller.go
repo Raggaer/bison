@@ -82,7 +82,7 @@ func (h *Handler) MainRoute(ctx *fasthttp.RequestCtx) {
 	state := lua.NewState([]*lua.Module{
 		lua.NewHTTPModule(ctx, params),
 		lua.NewConfigModule(h.Config.Custom),
-		lua.NewTemplateModule(h.Tpl, ctx),
+		lua.NewTemplateModule(h.Tpl, ctx, session),
 		lua.NewURLModule(),
 		lua.NewCacheModule(h.Cache),
 		lua.NewSessionModule(session),

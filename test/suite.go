@@ -36,8 +36,9 @@ func createTestServer(p chan<- int, t *testing.T) io.Closer {
 
 	// Load all templates
 	tpl, err := template.LoadTemplates(filepath.Join("views"), &template.TemplateFuncData{
-		Config: config,
-		Files:  files,
+		Config:          config,
+		Files:           files,
+		ControllersPath: filepath.Join("controllers"),
 	})
 	if err != nil {
 		log.Fatal(err)
@@ -52,11 +53,12 @@ func createTestServer(p chan<- int, t *testing.T) io.Closer {
 
 	// Create fasthttp server
 	handler := &controllers.Handler{
-		Config: config,
-		Routes: routes,
-		Files:  files,
-		Tpl:    tpl,
-		Cache:  cache.New(time.Minute*5, time.Minute*10),
+		Config:          config,
+		Routes:          routes,
+		Files:           files,
+		Tpl:             tpl,
+		Cache:           cache.New(time.Minute*5, time.Minute*10),
+		ControllersPath: filepath.Join("controllers"),
 	}
 
 	for _, rx := range routes {

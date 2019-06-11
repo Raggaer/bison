@@ -8,13 +8,18 @@ import (
 
 	"github.com/Raggaer/bison/app/config"
 	"github.com/Raggaer/bison/app/lua"
+	"github.com/fasthttp-contrib/sessions"
+	cache "github.com/patrickmn/go-cache"
+	"github.com/valyala/fasthttp"
 	glua "github.com/yuin/gopher-lua"
 )
 
 // TemplateFuncData data needed for template functions
 type TemplateFuncData struct {
-	Config *config.Config
-	Files  map[string]*glua.FunctionProto
+	Cache           *cache.Cache
+	Config          *config.Config
+	ControllersPath string
+	Files           map[string]*glua.FunctionProto
 }
 
 // LoadTemplates load the given view directory
@@ -37,8 +42,18 @@ func LoadTemplates(dir string, data *TemplateFuncData) (*template.Template, erro
 
 func templateFuncMap(h *TemplateFuncData) template.FuncMap {
 	return map[string]interface{}{
-		"execute": func(file string) template.HTML {
-			proto, ok := h.Files[filepath.Join("controllers", file)]
+		"execute": func(file string, data map[string]interface{}) template.HTML {
+			// Load values from the map
+			_, ok := data["_RequestContext"].(*fasthttp.RequestCtx)
+			if !ok {
+				return ""
+			}
+			session, ok := data["_Session"].(sessions.Session)
+			if !ok {
+				return ""
+			}
+
+			proto, ok := h.Files[filepath.Join(h.ControllersPath, file)]
 			if !ok {
 				return ""
 			}
@@ -46,6 +61,11 @@ func templateFuncMap(h *TemplateFuncData) template.FuncMap {
 			// Create state with basic bison modules
 			state := lua.NewState([]*lua.Module{
 				lua.NewConfigModule(h.Config.Custom),
+				lua.NewURLModule(),
+				lua.NewCacheModule(h.Cache),
+				lua.NewSessionModule(session),
+				lua.NewJSONModule(),
+				lua.NewEnvironmentModule(),
 			})
 			defer state.Close()
 
