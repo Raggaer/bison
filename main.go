@@ -91,6 +91,7 @@ func main() {
 		ConfigPath:      configPath,
 	}
 
+	// Register routes
 	for _, rx := range routes {
 		if rx.Method == http.MethodGet {
 			r.GET(rx.Path, handler.MainRoute)
@@ -99,10 +100,12 @@ func main() {
 			r.POST(rx.Path, handler.MainRoute)
 		}
 	}
+
 	if config.DevMode {
 		fmt.Println("Running development mode - bison listening on address '" + config.Address + "'")
 	} else {
 		fmt.Println("bison listening on address '" + config.Address + "'")
 	}
+
 	fasthttp.ListenAndServe(config.Address, r.Handler)
 }
